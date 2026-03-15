@@ -1,0 +1,60 @@
+#include <zephyr/dt-bindings/gpio/gpio.h>
+
+/ {
+    chosen {
+        zephyr,ieee802154 = &ieee802154;
+    };
+
+    aliases {
+        onewire0 = &onewire0;
+        i2c0 = &i2c22;   /* alias is prima voor C (DT_ALIAS(i2c0)), niet voor &-referenties */
+    };
+
+    onewire0: w1 {
+        compatible = "zephyr,w1-gpio";
+        status = "okay";
+        gpios = <&gpio2 2 (GPIO_OPEN_DRAIN | GPIO_PULL_UP)>;
+    };
+};
+
+&ieee802154 {
+    status = "okay";
+};
+
+&uart20 {
+    current-speed = <1000000>;
+    status = "okay";
+};
+
+/* I²C22 actief + pinmux naar PORT1: SCL=P1.11 (D5), SDA=P1.10 (D4) */
+&i2c22 {
+    status = "okay";
+    clock-frequency = <I2C_BITRATE_STANDARD>; /* 100 kHz */
+    pinctrl-0 = <&i2c22_default>;
+    pinctrl-1 = <&i2c22_sleep>;
+    pinctrl-names = "default", "sleep";
+
+    /* SHT41/SHT4x node op adres 0x44 (sommige varianten gebruiken 0x45) */
+    sht4x0: sht4x@44 {
+        compatible = "sensirion,sht4x";
+        reg = <0x44>;
+        repeatability = <2>;   /* verplicht: 0=low, 1=med, 2=high */
+        status = "okay";
+        /* zephyr,deferred-init;  // kan, maar is niet nodig hier */
+    };
+};
+
+/* Pinctrl: koppel i2c22 aan P1.11 (SCL) en P1.10 (SDA) */
+&pinctrl {
+    /omit-if-no-ref/ i2c22_default: i2c22_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SCL, 1, 11)>, <NRF_PSEL(TWIM_SDA, 1, 10)>;
+        };
+    };
+    /omit-if-no-ref/ i2c22_sleep: i2c22_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SCL, 1, 11)>, <NRF_PSEL(TWIM_SDA, 1, 10)>;
+            low-power-enable;
+        };
+    };
+};

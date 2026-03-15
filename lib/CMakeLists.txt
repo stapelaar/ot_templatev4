@@ -1,0 +1,2 @@
+# Conditioneel op Kconfig toggles
+add_subdirectory_ifdef(CONFIG_APP_USE_SHT41_SENSOR sensors_sht41)

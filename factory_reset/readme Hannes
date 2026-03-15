@@ -1,0 +1,3 @@
+Een factory reset van een xiao nrf54l15 doe je door in deze directory te tikken:
+bash facory_reset.sh
+

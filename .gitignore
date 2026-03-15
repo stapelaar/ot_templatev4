@@ -1,0 +1,26 @@
+# Zephyr build spul
+/build/
+build/
+.config/
+.overlay/
+.venv/
+.west/
+.cache/
+zephyr/
+*.bin
+*.hex
+*.uf2
+
+# macOS / Apple rommel
+.DS_Store
+*.swp
+._* 
+
+# Editors / IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Logs en temp
+*.log
+

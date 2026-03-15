@@ -1,0 +1,38 @@
+mainmenu "ot_templatev4"
+
+menu "App options"
+
+config APP_TRANSPORT_COAP
+    bool "Use CoAP transport"
+    default y
+
+config APP_PUBLISH_UPTIME
+    bool "Publish uptime"
+    default y
+
+config APP_USE_SHT41_SENSOR
+    bool "Use SHT41 sensor publisher"
+    default n
+
+config APP_NODE_ID
+    string "Node ID (e.g. 12 -> ND12)"
+    default "00"
+
+config APP_MEASUREMENT_PERIOD_S
+    int "Measurement period (seconds)"
+    default 60
+    range 1 86400
+
+config APP_COAP_ACK_TIMEOUT_MS
+    int "CoAP ACK initial timeout (ms)"
+    default 800
+    range 100 5000
+
+config APP_COAP_RETRIES
+    int "CoAP CON retries"
+    default 3
+    range 0 8
+
+endmenu
+
+source "Kconfig.zephyr"
