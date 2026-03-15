@@ -1,6 +1,7 @@
 #include "topic.h"
 #include <string.h>
 #include <stdio.h>
+#include <zephyr/sys/printk.h>
 
 int topic_root(char *out, size_t out_len, const char *node_id)
 {

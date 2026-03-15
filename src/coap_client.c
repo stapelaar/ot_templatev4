@@ -6,6 +6,7 @@ LOG_MODULE_REGISTER(coap_client, LOG_LEVEL_INF);
 #include <zephyr/net/coap.h>
 #include <zephyr/settings/settings.h>
 #include <zephyr/random/random.h>
+#include <zephyr/sys/printk.h>
 #include <string.h>
 #include <errno.h>
 
@@ -193,11 +194,13 @@ static int coap_wait_ack(uint16_t expect_msg_id,
         if (coap_header_get_id(&pkt) != expect_msg_id) {
             continue;
         }
-        if (coap_header_get_token_len(&pkt) != tlen) {
+    
+		uint8_t tkbuf[8];
+	    uint8_t rlen = coap_header_get_token(&pkt, tkbuf);
+        if (rlen != tlen) {
             continue;
         }
-        const uint8_t *tk = coap_header_get_token(&pkt);
-        if (!tk || memcmp(tk, expect_token, tlen) != 0) {
+        if (memcmp(tkbuf, expect_token, tlen) != 0) {
             continue;
         }
 

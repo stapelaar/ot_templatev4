@@ -8,6 +8,11 @@ LOG_MODULE_REGISTER(app_core, LOG_LEVEL_INF);
 #include "transport.h"
 #include "topic.h"
 
+#include <zephyr/net/openthread.h>
+#include <openthread/instance.h>
+#include <openthread/thread.h>
+
+
 /* --- Kconfig --------------------------------------------------------------- */
 #ifndef CONFIG_APP_NODE_ID
 #define CONFIG_APP_NODE_ID "00"
@@ -47,8 +52,33 @@ __weak void app_core_on_sample_and_publish(const char *root)
     /* laat leeg; alleen uptime wordt gepubliceerd */
 }
 
+static bool ot_is_attached_now(void)
+{
+    bool attached = false;
+
+    openthread_mutex_lock();
+    otInstance *inst = openthread_get_default_instance();
+    if (inst) {
+        otDeviceRole role = otThreadGetDeviceRole(inst);
+        attached = (role == OT_DEVICE_ROLE_CHILD) ||
+                   (role == OT_DEVICE_ROLE_ROUTER) ||
+                   (role == OT_DEVICE_ROLE_LEADER);
+    }
+    openthread_mutex_unlock();
+
+    return attached;
+}
+
+
 static void sample_work_handler(struct k_work *w)
 {
+    
+	if (!ot_is_attached_now()) {
+    	/* Nog geen Thread attach → wacht gewoon op volgende tick */
+    	return;
+	}
+
+    
     ARG_UNUSED(w);
 
     char root[16];
@@ -79,7 +109,8 @@ int app_core_start(void)
     k_work_init(&sample_work, sample_work_handler);
     atomic_store(&sampling_busy, false);
 
-    uint32_t last_sample = k_uptime_get_32();
+    /* Forceer een immediate meting bij boot */
+    uint32_t last_sample = k_uptime_get_32() - (CONFIG_APP_MEASUREMENT_PERIOD_S * 1000U);
 
     while (1) {
         k_timer_status_sync(&tick_timer); /* wacht tot volgende tick */

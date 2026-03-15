@@ -2,6 +2,15 @@ mainmenu "ot_templatev4"
 
 menu "App options"
 
+
+config APP_DEBUG_SENSOR
+    bool "Log sensor detection and readouts"
+    default y
+
+config APP_DEBUG_TRANSPORT
+    bool "Log CoAP publishes (topic and result code)"
+    default y
+
 config APP_TRANSPORT_COAP
     bool "Use CoAP transport"
     default y

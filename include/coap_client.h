@@ -1,6 +1,7 @@
 #pragma once
 #include <stdbool.h>
 #include <stdint.h>
+#include <stddef.h>   /* size_t voor coap_client_get_server() */
 
 int  coap_client_init(const char *server_addr, uint16_t port);
 int  coap_client_set_server(const char *server_addr, uint16_t port);
