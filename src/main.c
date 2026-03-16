@@ -4,7 +4,7 @@ LOG_MODULE_REGISTER(app_main, LOG_LEVEL_INF);
 extern int app_core_start(void);
 
 /* Simpel versienummer: jij beheert dit zelf */
-#define APP_VERSION   "v4.1.0"
+#define APP_VERSION   "v4.2.0"
 
 /* Optioneel: automatisch buildtijdstip */
 #define APP_BUILD     __DATE__ " " __TIME__

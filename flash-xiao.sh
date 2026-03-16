@@ -57,7 +57,7 @@ if [[ -z "$NODE" ]]; then
   exit 2
 fi
 
-BUILD_DIR="${BUILD_DIR_OVERRIDE:-$APP_DIR/build/54l15/$NODE}"
+BUILD_DIR="${BUILD_DIR_OVERRIDE:-$APP_DIR/build/$NODE}"
 
 if [[ ! -d "$BUILD_DIR" ]]; then
   echo "❌ Build dir not found: $BUILD_DIR" >&2

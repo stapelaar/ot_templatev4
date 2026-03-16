@@ -42,6 +42,13 @@
         status = "okay";
         /* zephyr,deferred-init;  // kan, maar is niet nodig hier */
     };
+    /* SCD41 CO2 sensor op adres 0x62 */
+    scd41_0: scd41@62 {
+        compatible = "sensirion,scd41";
+        reg = <0x62>;
+        mode = <1>;       /* 1 = periodic (integer, géén string) */
+        status = "okay";
+    };
 };
 
 /* Pinctrl: koppel i2c22 aan P1.11 (SCL) en P1.10 (SDA) */

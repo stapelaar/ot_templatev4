@@ -20,5 +20,8 @@ if(CONFIG_APP_USE_SHT41_SENSOR)
   target_sources(app PRIVATE lib/sensors_sht41/sensors_sht41.c)
 endif()
 
-# Andere libs (optioneel): laat staan als je die gebruikt
-add_subdirectory(lib)
+if(CONFIG_APP_USE_SCD41_SENSOR)
+  target_sources(app PRIVATE lib/sensors_scd41/sensors_scd41.c)
+endif()
+
+
